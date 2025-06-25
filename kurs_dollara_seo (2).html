@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Курс Доллара Сегодня — USD к RUB</title>
+  <meta name="description" content="Курс доллара США (USD) к российскому рублю (RUB) сегодня. Актуальные данные, ежедневное обновление, официальный источник.">
+  <meta name="keywords" content="курс доллара, доллар сегодня, USD к рублю, курс валют, доллар к рублю, курс доллара на сегодня, доллар ЦБ РФ">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="Курс Доллара Сегодня">
+  <meta property="og:description" content="Онлайн курс доллара к рублю. Обновляется ежедневно.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://your-login.github.io/dollar-site/">
+  <meta property="og:image" content="https://your-login.github.io/dollar-site/preview.png">
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+
+  <!-- AdSense: замените ca-pub-XXXXXXXXXXXX на свой -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXX"
+     crossorigin="anonymous"></script>
+
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(to right, #00c6ff, #0072ff);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    .rate {
+      font-size: 4.5rem;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+    .date {
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+    .ads {
+      margin: 30px 0;
+    }
+    .footer {
+      margin-top: 40px;
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+    p.seo-text {
+      max-width: 600px;
+      margin-top: 25px;
+      font-size: 1rem;
+      opacity: 0.95;
+    }
+  </style>
+</head>
+<body>
+  <h1>Курс Доллара (USD) к Рублю</h1>
+  <div class="rate" id="rate">Загрузка...</div>
+  <div class="date" id="date">Обновление...</div>
+
+  <!-- AdSense реклама -->
+  <div class="ads">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXX"
+         data-ad-slot="1234567890"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+
+  <p class="seo-text">
+    Узнай актуальный курс доллара сегодня — USD к RUB. Данные обновляются каждый день по официальной информации Центробанка РФ. Этот сайт позволяет быстро получить точную информацию, без лишней рекламы и сложностей.
+  </p>
+
+  <div class="footer">
+    © 2025 Курс Доллара Онлайн. Все права защищены.
+  </div>
+
+  <script>
+    async function fetchDollarRate() {
+      try {
+        const res = await fetch("https://www.cbr-xml-daily.ru/daily_json.js");
+        const data = await res.json();
+        const rate = data.Valute.USD.Value;
+        const previous = data.Valute.USD.Previous;
+        const date = new Date(data.Date).toLocaleDateString("ru-RU");
+        animateValue("rate", previous, rate, 1500);
+        document.getElementById("date").textContent = `Обновлено: ${date}`;
+      } catch (err) {
+        document.getElementById("rate").textContent = "Ошибка 😢";
+        console.error("Ошибка получения данных:", err);
+      }
+    }
+
+    function animateValue(id, start, end, duration) {
+      const obj = document.getElementById(id);
+      let startTimestamp = null;
+      const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        const current = start + (end - start) * progress;
+        obj.textContent = current.toFixed(2);
+        if (progress < 1) {
+          window.requestAnimationFrame(step);
+        }
+      };
+      window.requestAnimationFrame(step);
+    }
+
+    fetchDollarRate();
+  </script>
+</body>
+</html>
